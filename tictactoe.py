@@ -89,14 +89,8 @@ def draw_move(board):
 
     avail = make_list_of_free_fields(board)
 
-    for j in range(len(avail)):
-        x = randrange(5)
-        i = avail[x]
-   
-    print(avail)
-    print(len(avail))
-    print(x)
-    print(i)
+    x = randrange(len(avail))
+    i = avail[x] - 1
 
     time.sleep(8)
     move_helper(board, i, "O")
