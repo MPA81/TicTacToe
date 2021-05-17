@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
 import os
+import time
 from random import randrange
 
 
 def display_board(board):
     # The function accepts one parameter containing the board's current status
     # and prints it out to the console.
-
-    global moves
-    moves = 0
 
     os.system('clear') 
     print(3 * "+-------", end="+\n")
@@ -19,19 +17,6 @@ def display_board(board):
         print()
         print(3 * "|       ", end="|\n")
         print(3 * "+-------", end="+\n")
-
-    victor = victory_for(board, "X")
-    
-    if victor:
-        return
-
-    if moves % 2:
-        moves += 1
-        draw_move(board)
-    else:
-        moves += 1
-        enter_move(board)
-
 
 
 def enter_move(board):
@@ -69,28 +54,28 @@ def victory_for(board, sign):
                 posi = (i,j)
                 xos.append(posi) 
 
-    print(xos)
+    # print(xos)
    
     if (1,1)in xos:
-        if (0,2) and (2,0) in xos:
+        if (0,2) in xos and (2,0) in xos:
             booly = True
-        elif (1,0) and (1,2) in xos:
+        elif (1,0) in xos and (1,2) in xos:
             booly = True
-        elif (0,1) and (2,1) in xos:
+        elif (0,1) in xos and (2,1) in xos:
             booly = True
-        elif (0,0) and (2,2) in xos:
+        elif (0,0) in xos and (2,2) in xos:
             booly = True
     
     if (0,0) in xos:
-        if (0,1) and (0,2) in xos:
+        if (0,1) in xos and (0,2) in xos:
             booly = True
-        elif (1,0) and (2,0) in xos:
+        elif (1,0) in xos and (2,0) in xos:
             booly = True
 
     if (2,2) in xos:
-        if (2,0) and (2,1) in xos:
+        if (2,0) in xos and (2,1) in xos:
             booly = True
-        elif (0,2) and (1,2) in xos:
+        elif (0,2) in xos and (1,2) in xos:
             booly = True
 
     if booly:
@@ -103,14 +88,17 @@ def draw_move(board):
     # The function draws the computer's move and updates the board.
 
     avail = make_list_of_free_fields(board)
-    i = 11
 
-    print(avail, "- available")
+    for j in range(len(avail)):
+        x = randrange(5)
+        i = avail[x]
+   
+    print(avail)
+    print(len(avail))
+    print(x)
+    print(i)
 
-    while i not in avail:
-        for j in range(10):
-            i = randrange(5)
-
+    time.sleep(8)
     move_helper(board, i, "O")
 
 
@@ -122,6 +110,7 @@ def move_helper(board, val, sign):
     display_board(board)
     make_list_of_free_fields(board)
 
+moves = 0
 
 # creating the 2D array for the board
 board = [[0 for x in range(3)] for y in range(3)]
@@ -132,9 +121,18 @@ for i in range(9):
     y = i % 3
     z = board[x][y] = i + 1
 
-print(board)
 display_board(board)
 
-#victory_for(board, "X")
+victor = False 
 
-# enter_move(board)
+while not victor:
+    if moves % 2:
+        sign = "X"
+        draw_move(board)
+    else:
+        sign = "O"
+        enter_move(board)
+
+    moves += 1
+
+    victor = victory_for(board, sign)
