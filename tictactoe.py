@@ -29,6 +29,16 @@ def enter_move(board):
 
     move_helper(board, chango, "X")
 
+def ohh_move(board):
+    # This function also accepts the board current status, asks a user about their move,
+    # checks the input and updates the board according to the user's decision.
+
+    chango = int(input("Tell us the number of the square you would like to place an O in: "))
+    if chango < 10:
+        chango -= 1
+
+    move_helper(board, chango, "O")
+
 
 def make_list_of_free_fields(board):
     # The function browses the board and builds a list of all the free squares;
@@ -92,7 +102,6 @@ def draw_move(board):
     x = randrange(len(avail))
     i = avail[x] - 1
 
-    time.sleep(8)
     move_helper(board, i, "O")
 
 
@@ -101,10 +110,21 @@ def move_helper(board, val, sign):
     y = val % 3
     board[x][y] = sign 
 
+    time.sleep(3)
     display_board(board)
     make_list_of_free_fields(board)
 
 moves = 0
+options = -1
+friends = False
+
+while options != 0 and options != 1:
+    os.system('clear') 
+    print("\n\nWould you like to play TicTacToe vs. a machine or against a friend?")
+    options = int(input("\n\t\t[0] for a machine \n\t\t[1] for a friend\n\t\t\t"))
+    if options == 1:
+        friends = True
+        
 
 # creating the 2D array for the board
 board = [[0 for x in range(3)] for y in range(3)]
@@ -117,12 +137,15 @@ for i in range(9):
 
 display_board(board)
 
-victor = False 
+victor = False
 
 while not victor:
     if moves % 2:
         sign = "X"
-        draw_move(board)
+        if friends:
+            ohh_move(board)
+        else:
+            draw_move(board)
     else:
         sign = "O"
         enter_move(board)
